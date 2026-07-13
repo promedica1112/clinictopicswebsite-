@@ -1,0 +1,67 @@
+[
+  {
+    "id": "c1",
+    "headline": "Updated Guidance Refines LDL-C Targets in Very-High-Risk Patients",
+    "summary": "New consensus guidance lowers the LDL-C target for patients with established cardiovascular disease and adds a stepwise approach to combination therapy when statins alone are insufficient.",
+    "expanded": "The revised guidance reflects five years of additional outcomes data from combination lipid-lowering trials. It applies to adults with confirmed atherosclerotic cardiovascular disease and introduces a structured escalation pathway.",
+    "specialty": "cardiology",
+    "audience": "professional",
+    "contentType": "Clinical Update",
+    "keyFindings": [
+      "New target: LDL-C below 55 mg/dL for very-high-risk patients",
+      "Combination therapy recommended earlier in the treatment pathway",
+      "Applies to secondary prevention populations"
+    ],
+    "clinicalRelevance": "May prompt earlier initiation of combination therapy rather than sequential statin titration alone.",
+    "limitation": "Guidance based on pooled trial data; individual patient risk should still guide therapy.",
+    "sourceTitle": "2026 Lipid Management Consensus Statement",
+    "sourceOrg": "International Society of Cardiology",
+    "sourceUrl": "https://example.org/lipid-guidance-2026",
+    "publishedDate": "2026-07-12",
+    "relatedVideoId": "v1",
+    "status": "published",
+    "featured": true
+  },
+  {
+    "id": "c2",
+    "headline": "Five Simple Habits That Lower Diabetes Risk",
+    "summary": "A large cohort study confirms that a handful of everyday habits meaningfully reduce the risk of developing Type 2 diabetes, even in people with a family history.",
+    "expanded": "Researchers followed over 90,000 adults for a decade, tracking diet, activity, sleep, and weight trends. Participants who maintained several protective habits together saw the greatest risk reduction.",
+    "specialty": "diabetology",
+    "audience": "patient",
+    "contentType": "Public Health",
+    "keyFindings": [
+      "30+ minutes of daily activity linked to lower risk",
+      "Consistent sleep timing was independently protective",
+      "Combined habits outperformed any single change"
+    ],
+    "clinicalRelevance": "Useful talking points for preventive counselling in primary care visits.",
+    "limitation": "Observational cohort study; cannot fully separate habit effects from other lifestyle factors.",
+    "sourceTitle": "Long-Term Lifestyle Patterns and Diabetes Incidence",
+    "sourceOrg": "Journal of Preventive Medicine",
+    "publishedDate": "2026-07-08",
+    "relatedVideoId": "v2",
+    "status": "published",
+    "featured": true
+  },
+  {
+    "id": "c3",
+    "headline": "WHO Updates Vaccination Schedule for Adolescents",
+    "summary": "Revised recommendations extend catch-up eligibility and clarify spacing between adolescent booster doses.",
+    "expanded": "The update responds to shifting regional coverage gaps identified in recent surveillance data, with clarified guidance for clinics managing mixed-schedule patients.",
+    "specialty": "public-health",
+    "audience": "both",
+    "contentType": "Guidelines and Consensus",
+    "keyFindings": [
+      "Catch-up window extended to age 19",
+      "Minimum spacing between doses clarified",
+      "New guidance on mixed-schedule patients"
+    ],
+    "clinicalRelevance": "Clinics should review adolescent catch-up protocols against the new spacing rules.",
+    "limitation": "Regional health authorities may adapt timelines differently.",
+    "sourceTitle": "Adolescent Immunization Schedule Update",
+    "sourceOrg": "World Health Organization",
+    "publishedDate": "2026-07-05",
+    "status": "published"
+  }
+]

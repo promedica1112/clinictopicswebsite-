@@ -1,0 +1,22 @@
+[
+  { "slug": "cardiology", "name": "Cardiology" },
+  { "slug": "dermatology", "name": "Dermatology" },
+  { "slug": "diabetology", "name": "Diabetology" },
+  { "slug": "endocrinology", "name": "Endocrinology" },
+  { "slug": "gastroenterology", "name": "Gastroenterology" },
+  { "slug": "neurology", "name": "Neurology" },
+  { "slug": "oncology", "name": "Oncology" },
+  { "slug": "orthopaedics", "name": "Orthopaedics" },
+  { "slug": "paediatrics", "name": "Paediatrics" },
+  { "slug": "psychiatry", "name": "Psychiatry" },
+  { "slug": "pulmonology", "name": "Pulmonology" },
+  { "slug": "nephrology", "name": "Nephrology" },
+  { "slug": "obstetrics-gynaecology", "name": "Obstetrics & Gynaecology" },
+  { "slug": "infectious-diseases", "name": "Infectious Diseases" },
+  { "slug": "general-medicine", "name": "General Medicine" },
+  { "slug": "rheumatology", "name": "Rheumatology" },
+  { "slug": "urology", "name": "Urology" },
+  { "slug": "ophthalmology", "name": "Ophthalmology" },
+  { "slug": "preventive-medicine", "name": "Preventive Medicine" },
+  { "slug": "public-health", "name": "Public Health" }
+]
