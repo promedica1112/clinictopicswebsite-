@@ -29,6 +29,15 @@ export default function NewsCardFlip({
             {audienceLabel(card.audience)} &middot; {formatDate(card.publishedDate)}
           </p>
 
+          {card.imageUrl && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={card.imageUrl}
+              alt=""
+              className="w-full h-28 object-cover rounded-lg mb-3"
+            />
+          )}
+
           <h3 className="font-heading font-bold text-xl text-navy leading-snug mb-3">
             {card.headline}
           </h3>

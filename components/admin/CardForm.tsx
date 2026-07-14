@@ -15,25 +15,37 @@ const contentTypes = [
   "Conference Highlight",
 ];
 
-export default function CardForm({ specialties }: { specialties: Specialty[] }) {
+export default function CardForm({
+  specialties,
+  initial,
+}: {
+  specialties: Specialty[];
+  initial?: Partial<
+    NewsCard & {
+      originalTitle: string;
+      originalBody: string;
+    }
+  >;
+}) {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState({
-    headline: "",
-    summary: "",
-    expanded: "",
-    specialty: specialties[0]?.slug ?? "",
-    audience: "both",
-    contentType: contentTypes[0],
-    keyFindings: "",
-    clinicalRelevance: "",
-    limitation: "",
-    sourceTitle: "",
-    sourceOrg: "",
-    sourceUrl: "",
-    publishedDate: new Date().toISOString().slice(0, 10),
-    status: "published",
-    featured: false,
+    headline: initial?.headline ?? "",
+    summary: initial?.summary ?? "",
+    expanded: initial?.expanded ?? "",
+    specialty: initial?.specialty ?? specialties[0]?.slug ?? "",
+    audience: initial?.audience ?? "both",
+    contentType: initial?.contentType ?? contentTypes[0],
+    keyFindings: initial?.keyFindings?.join("\n") ?? "",
+    clinicalRelevance: initial?.clinicalRelevance ?? "",
+    limitation: initial?.limitation ?? "",
+    sourceTitle: initial?.sourceTitle ?? "",
+    sourceOrg: initial?.sourceOrg ?? "",
+    sourceUrl: initial?.sourceUrl ?? "",
+    imageUrl: initial?.imageUrl ?? "",
+    publishedDate: initial?.publishedDate ?? new Date().toISOString().slice(0, 10),
+    status: initial?.status ?? "published",
+    featured: initial?.featured ?? false,
   });
 
   const update = (key: string, value: string | boolean) =>
@@ -42,10 +54,25 @@ export default function CardForm({ specialties }: { specialties: Specialty[] }) 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
+    const payload = {
+      ...form,
+      mood: initial?.mood,
+      sourceDomain: initial?.sourceDomain,
+      originalTitle: initial?.originalTitle,
+      originalBody: initial?.originalBody,
+      bodyDisplayMode: initial?.bodyDisplayMode,
+      imageSource: initial?.imageSource,
+      factCheckTitleStatus: initial?.factCheckTitleStatus,
+      factCheckTitleSummary: initial?.factCheckTitleSummary,
+      factCheckBodyStatus: initial?.factCheckBodyStatus,
+      factCheckBodySummary: initial?.factCheckBodySummary,
+      hasFactCheckWarning: initial?.hasFactCheckWarning,
+      readingGrade: initial?.readingGrade,
+    };
     const res = await fetch("/api/cards", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
+      body: JSON.stringify(payload),
     });
     setSaving(false);
     if (res.ok) {
@@ -74,6 +101,7 @@ export default function CardForm({ specialties }: { specialties: Specialty[] }) 
     sourceTitle: form.sourceTitle || "Source title",
     sourceOrg: form.sourceOrg || "Source organization",
     sourceUrl: form.sourceUrl,
+    imageUrl: form.imageUrl || undefined,
     publishedDate: form.publishedDate,
     status: "published",
   };
@@ -220,6 +248,16 @@ export default function CardForm({ specialties }: { specialties: Specialty[] }) 
             className={inputClass}
             value={form.sourceUrl}
             onChange={(e) => update("sourceUrl", e.target.value)}
+          />
+        </div>
+
+        <div>
+          <label className={labelClass}>Card Image URL (optional)</label>
+          <input
+            className={inputClass}
+            placeholder="https://..."
+            value={form.imageUrl}
+            onChange={(e) => update("imageUrl", e.target.value)}
           />
         </div>
 

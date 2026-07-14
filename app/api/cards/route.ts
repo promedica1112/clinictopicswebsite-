@@ -30,6 +30,19 @@ export async function POST(req: NextRequest) {
     relatedVideoId: body.relatedVideoId || undefined,
     status: body.status === "draft" ? "draft" : "published",
     featured: !!body.featured,
+    mood: body.mood || undefined,
+    sourceDomain: body.sourceDomain || undefined,
+    originalTitle: body.originalTitle || undefined,
+    originalBody: body.originalBody || undefined,
+    bodyDisplayMode: body.bodyDisplayMode || undefined,
+    imageUrl: body.imageUrl || undefined,
+    imageSource: body.imageSource || undefined,
+    factCheckTitleStatus: body.factCheckTitleStatus || undefined,
+    factCheckTitleSummary: body.factCheckTitleSummary || undefined,
+    factCheckBodyStatus: body.factCheckBodyStatus || undefined,
+    factCheckBodySummary: body.factCheckBodySummary || undefined,
+    hasFactCheckWarning: !!body.hasFactCheckWarning,
+    readingGrade: body.readingGrade || undefined,
   };
 
   await addCard(card);

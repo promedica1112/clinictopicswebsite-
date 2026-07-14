@@ -1,5 +1,5 @@
 import { Pool } from "pg";
-import type { Video, NewsCard, Specialty } from "./types";
+import type { Video, NewsCard, Specialty, FactCheckStatus } from "./types";
 import specialtiesSeed from "@/data/specialties.json";
 import videosSeed from "@/data/videos.json";
 import cardsSeed from "@/data/cards.json";
@@ -86,9 +86,46 @@ async function ensureSchema() {
       related_video_id TEXT,
       status TEXT NOT NULL DEFAULT 'published',
       featured BOOLEAN NOT NULL DEFAULT FALSE,
-      created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+      mood TEXT,
+      source_domain TEXT,
+      original_title TEXT,
+      original_body TEXT,
+      body_display_mode TEXT,
+      image_url TEXT,
+      image_source TEXT,
+      fact_check_title_status TEXT,
+      fact_check_title_summary TEXT,
+      fact_check_body_status TEXT,
+      fact_check_body_summary TEXT,
+      has_fact_check_warning BOOLEAN NOT NULL DEFAULT FALSE,
+      manually_verified BOOLEAN NOT NULL DEFAULT FALSE,
+      manually_verified_at TIMESTAMPTZ,
+      reading_grade REAL
     );
   `);
+
+  // Add any columns that may be missing on an existing table (safe to re-run)
+  const newColumns: [string, string][] = [
+    ["mood", "TEXT"],
+    ["source_domain", "TEXT"],
+    ["original_title", "TEXT"],
+    ["original_body", "TEXT"],
+    ["body_display_mode", "TEXT"],
+    ["image_url", "TEXT"],
+    ["image_source", "TEXT"],
+    ["fact_check_title_status", "TEXT"],
+    ["fact_check_title_summary", "TEXT"],
+    ["fact_check_body_status", "TEXT"],
+    ["fact_check_body_summary", "TEXT"],
+    ["has_fact_check_warning", "BOOLEAN NOT NULL DEFAULT FALSE"],
+    ["manually_verified", "BOOLEAN NOT NULL DEFAULT FALSE"],
+    ["manually_verified_at", "TIMESTAMPTZ"],
+    ["reading_grade", "REAL"],
+  ];
+  for (const [col, def] of newColumns) {
+    await query(`ALTER TABLE cards ADD COLUMN IF NOT EXISTS ${col} ${def};`);
+  }
 
   const specialtyCount = await query<{ count: number }>(
     `SELECT COUNT(*)::int AS count FROM specialties;`
@@ -166,6 +203,20 @@ function rowToCard(r: Record<string, unknown>): NewsCard {
     relatedVideoId: (r.related_video_id as string) ?? undefined,
     status: r.status as NewsCard["status"],
     featured: r.featured as boolean,
+    mood: (r.mood as NewsCard["mood"]) ?? undefined,
+    sourceDomain: (r.source_domain as string) ?? undefined,
+    originalTitle: (r.original_title as string) ?? undefined,
+    originalBody: (r.original_body as string) ?? undefined,
+    bodyDisplayMode: (r.body_display_mode as NewsCard["bodyDisplayMode"]) ?? undefined,
+    imageUrl: (r.image_url as string) ?? undefined,
+    imageSource: (r.image_source as NewsCard["imageSource"]) ?? undefined,
+    factCheckTitleStatus: (r.fact_check_title_status as FactCheckStatus) ?? undefined,
+    factCheckTitleSummary: (r.fact_check_title_summary as string) ?? undefined,
+    factCheckBodyStatus: (r.fact_check_body_status as FactCheckStatus) ?? undefined,
+    factCheckBodySummary: (r.fact_check_body_summary as string) ?? undefined,
+    hasFactCheckWarning: (r.has_fact_check_warning as boolean) ?? false,
+    manuallyVerified: (r.manually_verified as boolean) ?? false,
+    readingGrade: r.reading_grade != null ? Number(r.reading_grade) : undefined,
   };
 }
 
@@ -204,8 +255,15 @@ async function insertCard(c: NewsCard) {
     `INSERT INTO cards (
       id, headline, summary, expanded, specialty, audience, content_type,
       key_findings, clinical_relevance, limitation, source_title, source_org,
-      source_url, published_date, related_video_id, status, featured
-    ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17)
+      source_url, published_date, related_video_id, status, featured,
+      mood, source_domain, original_title, original_body, body_display_mode,
+      image_url, image_source, fact_check_title_status, fact_check_title_summary,
+      fact_check_body_status, fact_check_body_summary, has_fact_check_warning,
+      manually_verified, reading_grade
+    ) VALUES (
+      $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,
+      $18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31
+    )
     ON CONFLICT (id) DO NOTHING;`,
     [
       c.id,
@@ -225,6 +283,20 @@ async function insertCard(c: NewsCard) {
       c.relatedVideoId ?? null,
       c.status,
       !!c.featured,
+      c.mood ?? null,
+      c.sourceDomain ?? null,
+      c.originalTitle ?? null,
+      c.originalBody ?? null,
+      c.bodyDisplayMode ?? null,
+      c.imageUrl ?? null,
+      c.imageSource ?? null,
+      c.factCheckTitleStatus ?? null,
+      c.factCheckTitleSummary ?? null,
+      c.factCheckBodyStatus ?? null,
+      c.factCheckBodySummary ?? null,
+      !!c.hasFactCheckWarning,
+      !!c.manuallyVerified,
+      c.readingGrade ?? null,
     ]
   );
 }

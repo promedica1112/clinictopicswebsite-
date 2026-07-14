@@ -25,6 +25,19 @@ export type Video = {
   featured?: boolean;
 };
 
+export type Mood =
+  | "Neutral"
+  | "Professional"
+  | "Promotional"
+  | "Simplified Patient-Friendly"
+  | "Academic/Physician-Facing"
+  | "Conversational"
+  | "Creative"
+  | "Serious"
+  | "Empathetic";
+
+export type FactCheckStatus = "ok" | "warn" | "not_checked";
+
 export type NewsCard = {
   id: string;
   headline: string;
@@ -43,4 +56,19 @@ export type NewsCard = {
   relatedVideoId?: string;
   status: "draft" | "published";
   featured?: boolean;
+  // AI-assisted intake fields (optional — only present for cards created via URL rephrase flow)
+  mood?: Mood;
+  sourceDomain?: string;
+  originalTitle?: string;
+  originalBody?: string;
+  bodyDisplayMode?: "running" | "bullets";
+  imageUrl?: string;
+  imageSource?: "extracted" | "uploaded" | "external";
+  factCheckTitleStatus?: FactCheckStatus;
+  factCheckTitleSummary?: string;
+  factCheckBodyStatus?: FactCheckStatus;
+  factCheckBodySummary?: string;
+  hasFactCheckWarning?: boolean;
+  manuallyVerified?: boolean;
+  readingGrade?: number;
 };

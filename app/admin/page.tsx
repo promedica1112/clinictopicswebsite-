@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { PlusCircle, Video, Newspaper } from "lucide-react";
+import { PlusCircle, Video, Newspaper, Sparkles } from "lucide-react";
 import { getVideos, getCards } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -34,6 +34,26 @@ export default async function AdminDashboard() {
               <p className="text-xs text-slate mt-1">{s.label}</p>
             </div>
           ))}
+        </div>
+
+        <div className="grid sm:grid-cols-2 gap-6 mb-6">
+          <Link
+            href="/admin/cards/new-from-url"
+            className="rounded-2xl border border-teal/40 bg-teal/5 p-6 hover:border-teal hover:shadow-sm transition-all flex items-start gap-4 sm:col-span-2"
+          >
+            <span className="h-11 w-11 rounded-xl bg-teal text-white flex items-center justify-center shrink-0">
+              <Sparkles size={20} />
+            </span>
+            <div>
+              <h2 className="font-heading font-semibold text-navy mb-1">
+                Create News Card from Article URL
+              </h2>
+              <p className="text-sm text-slate">
+                Paste a source link — AI extracts, rephrases, and fact-checks it, then you review
+                before publishing.
+              </p>
+            </div>
+          </Link>
         </div>
 
         <div className="grid sm:grid-cols-2 gap-6 mb-12">

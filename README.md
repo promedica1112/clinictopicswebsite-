@@ -1,48 +1,67 @@
-# Clinic Topics — Website (v1)
+# Clinic Topics — Website
 
 A video library organized by specialty, an Inshorts-style swipeable medical
-news feed, and a password-protected admin panel for adding videos and news
-cards. Content is stored in a real Postgres database.
+news feed, and a password-protected admin panel — including an AI-assisted
+intake flow that extracts, rephrases, and fact-checks articles from a source
+URL before you review and publish them as news cards.
 
-## Setting up the database (one-time, ~3 minutes)
+## One-time setup after this deploy
 
-1. Open your project at **vercel.com**
-2. Click the **Storage** tab
-3. Click **Create Database** → choose **Postgres** (powered by Neon) → give it
-   any name → **Create**
-4. On the next screen, click **Connect Project** and select this project —
-   this automatically adds the `POSTGRES_URL` and related environment
-   variables for you
-5. Go to **Deployments** → click the **⋯** menu on the latest deployment →
-   **Redeploy**
+### 1. Database (if not already connected)
+Vercel → Storage → Create Database → Postgres → Connect to Project → Redeploy.
 
-That's it. The first time any page loads, the app automatically creates its
-tables and fills them with the sample videos/cards you've already seen.
-From then on, anything you add through `/admin` is saved permanently.
+### 2. Image storage (new — required for the AI intake flow's image step)
+1. Vercel → Storage → Create Database → **Blob**
+2. Give it any name → Create → Connect to Project
+3. Redeploy
 
-## Admin panel
+### 3. OpenAI API key (new — required for rephrase/fact-check)
+1. Vercel → Project → Settings → Environment Variables
+2. Name: `OPENAI_API_KEY`, Value: your OpenAI key (paste directly into Vercel,
+   never into chat or a file)
+3. Redeploy
 
-- URL: `/admin`
-- Default password: `clinictopics`
-- **Change this** by adding an environment variable in Vercel:
-  - Project → Settings → Environment Variables
-  - Name: `ADMIN_PASSWORD`, Value: your own password
-  - Redeploy afterward
+### 4. Admin password
+- Name: `ADMIN_PASSWORD`, Value: your own password (default is `clinictopics`
+  if unset — change this before relying on the site)
 
 ## Page structure
 
 - `/` — homepage
-- `/videos` — video library with specialty/audience filters
-- `/videos/watch/[id]` — individual video with embedded player
+- `/videos`, `/videos/watch/[id]` — video library and player
 - `/news` — swipeable, flippable medical update cards
 - `/specialties`, `/specialties/[slug]` — browse by specialty
-- `/admin` — dashboard, add video, create card (password protected)
+- `/admin` — dashboard (password protected)
+  - `/admin/videos/new` — add a video
+  - `/admin/cards/new` — manually create a news card
+  - `/admin/cards/new-from-url` — **AI-assisted**: paste a source article URL,
+    choose a tone/mood, get a rephrased draft with an automatic fact-check
+    against the original, pick an image, then review and publish using the
+    same form as manual cards
+
+## How the AI intake flow works
+
+1. **Extract** — paste a URL; the server fetches and parses the article
+   (title, ~440-character body extract, images). If extraction fails on a
+   particular site, there's a manual paste fallback.
+2. **Rephrase & fact-check** — pick a tone (Neutral, Professional, Patient-
+   Friendly, etc.); OpenAI rephrases the title and body while preserving
+   facts, numbers, and clinical qualifiers, then a second AI pass checks the
+   rephrase against the original and flags any factual drift.
+3. **Image** — select one of the extracted images or upload your own
+   (stored in Vercel Blob).
+4. **Review & publish** — lands in the same form used for manual cards, with
+   AI Media prefilled — add specialty, audience, key findings, clinical
+   relevance, and limitation, then publish.
+
+All OpenAI calls happen server-side; the API key never reaches the browser.
 
 ## Running locally (optional)
 
 1. Install Node.js (LTS) from nodejs.org
 2. `npm install`
-3. Create a `.env.local` file with a `POSTGRES_URL` pointing at your Vercel
-   Postgres database (find it in Vercel → Storage → your database → `.env.local` tab, copy the values)
+3. Create `.env.local` with `DATABASE_URL` (from Vercel → Storage → your
+   database → `.env.local` tab), `OPENAI_API_KEY`, and
+   `BLOB_READ_WRITE_TOKEN` (from Vercel → Storage → your Blob store)
 4. `npm run dev`
 5. Open `http://localhost:3000`
