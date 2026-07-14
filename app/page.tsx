@@ -9,12 +9,14 @@ import {
   getSpecialties,
   getPublishedVideos,
   getPublishedCards,
-} from "@/lib/store";
+} from "@/lib/db";
 
-export default function Home() {
-  const specialties = getSpecialties();
-  const videos = getPublishedVideos();
-  const cards = getPublishedCards();
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
+  const specialties = await getSpecialties();
+  const videos = await getPublishedVideos();
+  const cards = await getPublishedCards();
 
   const specialtyName = (slug: string) =>
     specialties.find((s) => s.slug === slug)?.name ?? slug;

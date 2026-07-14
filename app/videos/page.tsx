@@ -1,7 +1,9 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import VideoCard from "@/components/VideoCard";
-import { getSpecialties, getPublishedVideos } from "@/lib/store";
+import { getSpecialties, getPublishedVideos } from "@/lib/db";
+
+export const dynamic = "force-dynamic";
 
 export default async function VideosPage({
   searchParams,
@@ -9,8 +11,8 @@ export default async function VideosPage({
   searchParams: Promise<{ specialty?: string; audience?: string }>;
 }) {
   const params = await searchParams;
-  const specialties = getSpecialties();
-  let videos = getPublishedVideos();
+  const specialties = await getSpecialties();
+  let videos = await getPublishedVideos();
 
   if (params.specialty) {
     videos = videos.filter((v) => v.specialty === params.specialty);

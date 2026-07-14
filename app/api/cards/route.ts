@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { addCard } from "@/lib/store";
+import { addCard } from "@/lib/db";
 import type { NewsCard } from "@/lib/types";
 
 export async function POST(req: NextRequest) {
@@ -32,6 +32,6 @@ export async function POST(req: NextRequest) {
     featured: !!body.featured,
   };
 
-  addCard(card);
+  await addCard(card);
   return NextResponse.json({ success: true, card });
 }

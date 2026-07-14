@@ -1,12 +1,14 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SpecialtyCard from "@/components/SpecialtyCard";
-import { getSpecialties, getPublishedVideos, getPublishedCards } from "@/lib/store";
+import { getSpecialties, getPublishedVideos, getPublishedCards } from "@/lib/db";
 
-export default function SpecialtiesPage() {
-  const specialties = getSpecialties();
-  const videos = getPublishedVideos();
-  const cards = getPublishedCards();
+export const dynamic = "force-dynamic";
+
+export default async function SpecialtiesPage() {
+  const specialties = await getSpecialties();
+  const videos = await getPublishedVideos();
+  const cards = await getPublishedCards();
 
   return (
     <div className="min-h-screen flex flex-col">

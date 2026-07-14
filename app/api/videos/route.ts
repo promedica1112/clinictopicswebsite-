@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { addVideo } from "@/lib/store";
+import { addVideo } from "@/lib/db";
 import type { Video } from "@/lib/types";
 
 export async function POST(req: NextRequest) {
@@ -32,6 +32,6 @@ export async function POST(req: NextRequest) {
     featured: !!body.featured,
   };
 
-  addVideo(video);
+  await addVideo(video);
   return NextResponse.json({ success: true, video });
 }

@@ -2,8 +2,10 @@ import { notFound } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import VideoCard from "@/components/VideoCard";
-import { getPublishedVideos, getSpecialties } from "@/lib/store";
+import { getPublishedVideos, getSpecialties } from "@/lib/db";
 import { getEmbedUrl, formatDate, audienceLabel } from "@/lib/utils";
+
+export const dynamic = "force-dynamic";
 
 export default async function WatchPage({
   params,
@@ -11,9 +13,9 @@ export default async function WatchPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const videos = getPublishedVideos();
+  const videos = await getPublishedVideos();
   const video = videos.find((v) => v.id === id);
-  const specialties = getSpecialties();
+  const specialties = await getSpecialties();
 
   if (!video) notFound();
 

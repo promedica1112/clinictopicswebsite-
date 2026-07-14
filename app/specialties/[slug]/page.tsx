@@ -3,7 +3,9 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import VideoCard from "@/components/VideoCard";
 import NewsCardFlip from "@/components/NewsCardFlip";
-import { getSpecialties, getPublishedVideos, getPublishedCards } from "@/lib/store";
+import { getSpecialties, getPublishedVideos, getPublishedCards } from "@/lib/db";
+
+export const dynamic = "force-dynamic";
 
 export default async function SpecialtyPage({
   params,
@@ -11,12 +13,12 @@ export default async function SpecialtyPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const specialties = getSpecialties();
+  const specialties = await getSpecialties();
   const specialty = specialties.find((s) => s.slug === slug);
   if (!specialty) notFound();
 
-  const videos = getPublishedVideos().filter((v) => v.specialty === slug);
-  const cards = getPublishedCards().filter((c) => c.specialty === slug);
+  const videos = (await getPublishedVideos()).filter((v) => v.specialty === slug);
+  const cards = (await getPublishedCards()).filter((c) => c.specialty === slug);
 
   return (
     <div className="min-h-screen flex flex-col">

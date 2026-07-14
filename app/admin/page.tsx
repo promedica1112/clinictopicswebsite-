@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { PlusCircle, Video, Newspaper } from "lucide-react";
-import { getVideos, getCards } from "@/lib/store";
+import { getVideos, getCards } from "@/lib/db";
 
-export default function AdminDashboard() {
-  const videos = getVideos();
-  const cards = getCards();
+export const dynamic = "force-dynamic";
+
+export default async function AdminDashboard() {
+  const videos = await getVideos();
+  const cards = await getCards();
 
   const stats = [
     { label: "Published Videos", value: videos.filter((v) => v.status === "published").length },

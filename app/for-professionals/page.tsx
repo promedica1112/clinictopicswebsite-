@@ -1,11 +1,13 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import VideoCard from "@/components/VideoCard";
-import { getPublishedVideos, getSpecialties } from "@/lib/store";
+import { getPublishedVideos, getSpecialties } from "@/lib/db";
 
-export default function ForProfessionalsPage() {
-  const specialties = getSpecialties();
-  const videos = getPublishedVideos().filter(
+export const dynamic = "force-dynamic";
+
+export default async function ForProfessionalsPage() {
+  const specialties = await getSpecialties();
+  const videos = (await getPublishedVideos()).filter(
     (v) => v.audience === "professional" || v.audience === "both"
   );
   const specialtyName = (slug: string) =>

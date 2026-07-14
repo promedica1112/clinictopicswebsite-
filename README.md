@@ -1,70 +1,48 @@
 # Clinic Topics — Website (v1)
 
-This is your working Clinic Topics site: a video library organized by
-specialty, an Inshorts-style swipeable medical news feed, and a
-password-protected admin panel where you (the only uploader for now) add
-videos and news cards.
+A video library organized by specialty, an Inshorts-style swipeable medical
+news feed, and a password-protected admin panel for adding videos and news
+cards. Content is stored in a real Postgres database.
 
-## What's included
+## Setting up the database (one-time, ~3 minutes)
 
-- **Homepage** — hero, doctor/patient pathways, featured updates, specialties, latest videos
-- **/videos** — full video library with specialty and audience filters
-- **/videos/watch/[id]** — individual video page with embedded YouTube/Vimeo player
-- **/news** — swipeable, flippable medical update cards
-- **/specialties** and **/specialties/[slug]** — browse by specialty
-- **/admin** — password-protected dashboard to add videos and create news cards
-- Color palette, typography, and card design taken directly from your ChatGPT design brief
+1. Open your project at **vercel.com**
+2. Click the **Storage** tab
+3. Click **Create Database** → choose **Postgres** (powered by Neon) → give it
+   any name → **Create**
+4. On the next screen, click **Connect Project** and select this project —
+   this automatically adds the `POSTGRES_URL` and related environment
+   variables for you
+5. Go to **Deployments** → click the **⋯** menu on the latest deployment →
+   **Redeploy**
 
-No visitor login is required to browse the site — only the admin panel is
-password-protected.
-
-## Running it on your own computer (optional)
-
-You don't need to do this to deploy — Vercel can build it for you (see
-below). But if you want to preview it locally:
-
-1. Install Node.js from nodejs.org (choose the LTS version)
-2. Open a terminal in this folder and run: `npm install`
-3. Run: `npm run dev`
-4. Open `http://localhost:3000`
+That's it. The first time any page loads, the app automatically creates its
+tables and fills them with the sample videos/cards you've already seen.
+From then on, anything you add through `/admin` is saved permanently.
 
 ## Admin panel
 
 - URL: `/admin`
 - Default password: `clinictopics`
-- **Important:** before going live, change this password by setting an
-  `ADMIN_PASSWORD` environment variable (instructions below) — otherwise
-  anyone can log into your admin panel.
+- **Change this** by adding an environment variable in Vercel:
+  - Project → Settings → Environment Variables
+  - Name: `ADMIN_PASSWORD`, Value: your own password
+  - Redeploy afterward
 
-## Deploying — no terminal required
+## Page structure
 
-### Step 1: Put the code on GitHub
-1. Create a free account at github.com
-2. Click "New repository", name it `clinic-topics`, keep it Private, and create it
-3. On the new repo page, click "uploading an existing file"
-4. Drag in every file and folder from this project **except** `node_modules`
-   and `.next` (they're not needed and are excluded from this zip already)
-5. Commit the files
+- `/` — homepage
+- `/videos` — video library with specialty/audience filters
+- `/videos/watch/[id]` — individual video with embedded player
+- `/news` — swipeable, flippable medical update cards
+- `/specialties`, `/specialties/[slug]` — browse by specialty
+- `/admin` — dashboard, add video, create card (password protected)
 
-### Step 2: Deploy on Vercel
-1. Create a free account at vercel.com (sign up with your GitHub account — it's one click)
-2. Click "Add New Project"
-3. Select your `clinic-topics` repository and click "Import"
-4. Before clicking Deploy, open "Environment Variables" and add:
-   - Name: `ADMIN_PASSWORD`
-   - Value: (choose your own private password)
-5. Click "Deploy"
+## Running locally (optional)
 
-In a couple of minutes your site will be live at a `.vercel.app` address.
-You can later add a custom domain (like clinictopics.com) from the Vercel
-project's "Domains" tab.
-
-## Important limitation to know about
-
-Right now, new videos and cards you add in `/admin` are saved to JSON files
-inside the project. This works great for local testing, but **on Vercel,
-those changes will NOT be saved permanently** — Vercel's servers reset
-between deployments. This is fine for showing the design and layout, but
-before you rely on the admin panel day-to-day, we should connect a real
-database (a good free option is Supabase). Just let Claude know when you're
-ready for that step, and it can be wired in without changing how anything looks.
+1. Install Node.js (LTS) from nodejs.org
+2. `npm install`
+3. Create a `.env.local` file with a `POSTGRES_URL` pointing at your Vercel
+   Postgres database (find it in Vercel → Storage → your database → `.env.local` tab, copy the values)
+4. `npm run dev`
+5. Open `http://localhost:3000`

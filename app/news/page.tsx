@@ -1,11 +1,13 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import NewsFeed from "@/components/NewsFeed";
-import { getPublishedCards, getSpecialties } from "@/lib/store";
+import { getPublishedCards, getSpecialties } from "@/lib/db";
 
-export default function NewsPage() {
-  const cards = getPublishedCards();
-  const specialties = getSpecialties();
+export const dynamic = "force-dynamic";
+
+export default async function NewsPage() {
+  const cards = await getPublishedCards();
+  const specialties = await getSpecialties();
 
   return (
     <div className="min-h-screen flex flex-col">

@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import VideoForm from "@/components/admin/VideoForm";
-import { getSpecialties } from "@/lib/store";
+import { getSpecialties } from "@/lib/db";
 
-export default function NewVideoPage() {
-  const specialties = getSpecialties();
+export const dynamic = "force-dynamic";
+
+export default async function NewVideoPage() {
+  const specialties = await getSpecialties();
   return (
     <div className="min-h-screen bg-offwhite">
       <div className="bg-navy text-white">

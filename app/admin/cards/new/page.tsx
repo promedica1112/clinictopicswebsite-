@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import CardForm from "@/components/admin/CardForm";
-import { getSpecialties } from "@/lib/store";
+import { getSpecialties } from "@/lib/db";
 
-export default function NewCardPage() {
-  const specialties = getSpecialties();
+export const dynamic = "force-dynamic";
+
+export default async function NewCardPage() {
+  const specialties = await getSpecialties();
   return (
     <div className="min-h-screen bg-offwhite">
       <div className="bg-navy text-white">
